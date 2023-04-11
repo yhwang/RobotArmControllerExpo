@@ -2,34 +2,68 @@ import * as React from 'react';
 import { StyleSheet, View, Text} from 'react-native';
 import { IconButton, useTheme, ToggleButton } from 'react-native-paper';
 import { GestureResponderEvent } from 'react-native/types';
+import Constants from "expo-constants";
+const REACT_APP_SERVER_IP = Constants.expoConfig.extra.REACT_APP_SERVER_IP;
+const REACT_APP_SERVER_PORT = Constants.expoConfig.extra.REACT_APP_SERVER_PORT;
+
 
 type JoinProps = {
   id: string
 };
 
-const turn = (event: GestureResponderEvent) => {
-}
+const postUrl = `http://${REACT_APP_SERVER_IP}:${REACT_APP_SERVER_PORT}`;
 
 const Joint = (props: JoinProps) => {
   const [value, setValue] = React.useState("5");
   const theme = useTheme();
   var longPress = false;
-
   // single click
   const turn = (direction: string) => {
-    console.log(`joint: ${props.id}, direction: ${direction}, degree: ${value}`);
+    if (value) {
+      fetch(`${postUrl}/joint/turn?joint=${props.id}&direction=${direction}&degree=${value}`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(response => response.json())
+      .then(json => {
+        console.log(`joint: ${props.id}, direction: ${direction}, degree: ${value}, res: ${json.res}`);
+      });
+    }
   }
 
   // long press
   const turning = (direction: string): void =>  {
     longPress = true;
-    console.log(`joint: ${props.id}, long press, direction: ${direction}`);
+    fetch(`${postUrl}/joint/run?joint=${props.id}&direction=${direction}`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    })
+    .then(response => response.json())
+    .then(json => {
+      console.log(`run joint: ${props.id}, direction: ${direction}, res: ${json.res}`);
+    });
   }
 
   const stopTurn = (event: GestureResponderEvent) => {
     if (longPress) {
-      console.log(`joint: ${props.id}, long press end`);
       longPress = false;
+      fetch(`${postUrl}/joint/stop?joint=${props.id}`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(response => response.json())
+      .then(json => {
+        console.log(`joint: ${props.id}, long press end,  res: ${json.res}`);
+      });
     }
   }
 
