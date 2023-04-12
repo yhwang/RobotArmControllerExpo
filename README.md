@@ -15,7 +15,9 @@ both React Native and Express.js are running on a Raspberry Pi 4 Model B which u
 Arduino Wifi Uno Rev.2. Yes, I had programmed the Arduino to use Wifi at the very beginning. However, I found the
 serial port is more straightforward and stable than Wifi.
 
-The first axis of the robot arm is formed by a Nema 23 (23HS32-4004S) and a 3D-printed RV reducer with a 1:20 gear ratio.
+The first axis of the robot arm is formed by a Nema 23 (23HS32-4004S) and a 3D-printed RV reducer with a 20:1 gear ratio.
+I guess the second axis would have the same setup.
+
 All of these are new to me, except the programming part. I need to learn how to connect and use the stepper motor, driver,
 and Arduino Uno from the very basics. More detailed information will be added soon.
 
@@ -43,3 +45,6 @@ I am using Node 18. I believe you can use newer version.
    npm run local:run
    ```
    Or you can run `npm run server` on the back end server and `npm start` on the server where you want to run the mobile/web App
+1. Open the `Expo go` on your mobile and launch the app.
+
+## Details of the server side setup
